@@ -1,0 +1,408 @@
+{
+  "name": "SemanticModel",
+  "compatibilityLevel": 1200,
+  "model": {
+    "culture": "en-US",
+    "dataSources": [
+      {
+        "name": "SqlServer localhost autobusi_DW",
+        "connectionString": "Provider=SQLNCLI11;Data Source=localhost;Initial Catalog=autobusi_DW;Integrated Security=SSPI;Persist Security Info=false",
+        "impersonationMode": "impersonateServiceAccount",
+        "annotations": [
+          {
+            "name": "ConnectionEditUISource",
+            "value": "SqlServer"
+          }
+        ]
+      }
+    ],
+    "tables": [
+      {
+        "name": "dim_godina",
+        "columns": [
+          {
+            "name": "godinaKey",
+            "dataType": "int64",
+            "sourceColumn": "godinaKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "voznja_ID",
+            "dataType": "int64",
+            "sourceColumn": "voznja_ID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "godina_voznje",
+            "dataType": "int64",
+            "sourceColumn": "godina_voznje",
+            "sourceProviderType": "Integer"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_godina",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " SELECT [dbo].[dim_godina].* FROM [dbo].[dim_godina] ",
+              "dataSource": "SqlServer localhost autobusi_DW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "broj_godina",
+            "expression": "COUNTA([godina_voznje])"
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[dim_godina].* FROM [dbo].[dim_godina] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "dim_godina"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "dim_linija",
+        "columns": [
+          {
+            "name": "linijaKey",
+            "dataType": "int64",
+            "sourceColumn": "linijaKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "linija_ID",
+            "dataType": "int64",
+            "sourceColumn": "linija_ID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "vrijeme_polaska",
+            "dataType": "dateTime",
+            "sourceColumn": "vrijeme_polaska",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "vrijeme_dolaska",
+            "dataType": "dateTime",
+            "sourceColumn": "vrijeme_dolaska",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "duzina_putovanja",
+            "dataType": "dateTime",
+            "sourceColumn": "duzina_putovanja",
+            "formatString": "General Date",
+            "sourceProviderType": "DBTimeStamp"
+          },
+          {
+            "name": "linija_tip_naziv",
+            "dataType": "string",
+            "sourceColumn": "linija_tip_naziv",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "type": "calculated",
+            "name": "br_sati_putovanja",
+            "dataType": "int64",
+            "isDataTypeInferred": true,
+            "expression": "HOUR([duzina_putovanja])"
+          },
+          {
+            "type": "calculated",
+            "name": "kateg_linije",
+            "dataType": "string",
+            "isDataTypeInferred": true,
+            "expression": "IF([br_sati_putovanja]<2,\"kratka\",\"duga\")"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_linija",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " SELECT [dbo].[dim_linija].* FROM [dbo].[dim_linija] ",
+              "dataSource": "SqlServer localhost autobusi_DW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "br_kateg_linije",
+            "expression": "COUNTA([kateg_linije])"
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[dim_linija].* FROM [dbo].[dim_linija] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "dim_linija"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "dim_radnik",
+        "columns": [
+          {
+            "name": "radnikKey",
+            "dataType": "int64",
+            "sourceColumn": "radnikKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "radnik_ID",
+            "dataType": "string",
+            "sourceColumn": "radnik_ID",
+            "sourceProviderType": "Char"
+          },
+          {
+            "name": "radnik_kval_opis",
+            "dataType": "string",
+            "sourceColumn": "radnik_kval_opis",
+            "sourceProviderType": "WChar"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_radnik",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " SELECT [dbo].[dim_radnik].* FROM [dbo].[dim_radnik] ",
+              "dataSource": "SqlServer localhost autobusi_DW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "broj_radnika",
+            "expression": "COUNTA([radnikKey])"
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[dim_radnik].* FROM [dbo].[dim_radnik] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "dim_radnik"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "dim_vozilo",
+        "columns": [
+          {
+            "name": "voziloKey",
+            "dataType": "int64",
+            "sourceColumn": "voziloKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "vozilo_ID",
+            "dataType": "int64",
+            "sourceColumn": "vozilo_ID",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "vozilo_reg_oznaka",
+            "dataType": "string",
+            "sourceColumn": "vozilo_reg_oznaka",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "vozilo_tip_naziv",
+            "dataType": "string",
+            "sourceColumn": "vozilo_tip_naziv",
+            "sourceProviderType": "WChar"
+          },
+          {
+            "name": "vozilo_max_br_sjed",
+            "dataType": "int64",
+            "sourceColumn": "vozilo_max_br_sjed",
+            "sourceProviderType": "Integer"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "dim_vozilo",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " SELECT [dbo].[dim_vozilo].* FROM [dbo].[dim_vozilo] ",
+              "dataSource": "SqlServer localhost autobusi_DW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "uk_br_sjed",
+            "expression": "SUM([vozilo_max_br_sjed])"
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[dim_vozilo].* FROM [dbo].[dim_vozilo] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "dim_vozilo"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      },
+      {
+        "name": "fact_voznja",
+        "columns": [
+          {
+            "name": "factVoznjaKey",
+            "dataType": "int64",
+            "sourceColumn": "factVoznjaKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "godinaKey",
+            "dataType": "int64",
+            "sourceColumn": "godinaKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "radnikKey",
+            "dataType": "int64",
+            "sourceColumn": "radnikKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "voziloKey",
+            "dataType": "int64",
+            "sourceColumn": "voziloKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "linijaKey",
+            "dataType": "int64",
+            "sourceColumn": "linijaKey",
+            "sourceProviderType": "Integer"
+          },
+          {
+            "name": "voznja_prihod",
+            "dataType": "double",
+            "sourceColumn": "voznja_prihod",
+            "sourceProviderType": "Double"
+          },
+          {
+            "name": "zarada",
+            "dataType": "double",
+            "sourceColumn": "zarada",
+            "sourceProviderType": "Double"
+          }
+        ],
+        "partitions": [
+          {
+            "name": "fact_voznja",
+            "dataView": "full",
+            "source": {
+              "type": "query",
+              "query": " SELECT [dbo].[fact_voznja].* FROM [dbo].[fact_voznja] ",
+              "dataSource": "SqlServer localhost autobusi_DW"
+            }
+          }
+        ],
+        "measures": [
+          {
+            "name": "ukupna_voznja_prihod",
+            "expression": "SUM([voznja_prihod])"
+          },
+          {
+            "name": "ukupna_zarada",
+            "expression": "SUM([zarada])"
+          },
+          {
+            "name": "broj_voznji",
+            "expression": "COUNTA([factVoznjaKey])"
+          }
+        ],
+        "annotations": [
+          {
+            "name": "_TM_ExtProp_QueryDefinition",
+            "value": " SELECT [dbo].[fact_voznja].* FROM [dbo].[fact_voznja] "
+          },
+          {
+            "name": "_TM_ExtProp_DbTableName",
+            "value": "fact_voznja"
+          },
+          {
+            "name": "_TM_ExtProp_DbSchemaName",
+            "value": "dbo"
+          }
+        ]
+      }
+    ],
+    "relationships": [
+      {
+        "name": "b8049feb-fdbf-461b-addc-e55d3186d758",
+        "fromTable": "fact_voznja",
+        "fromColumn": "godinaKey",
+        "toTable": "dim_godina",
+        "toColumn": "godinaKey"
+      },
+      {
+        "name": "7c750b9a-9135-4ad4-acc4-b4b954705f25",
+        "fromTable": "fact_voznja",
+        "fromColumn": "linijaKey",
+        "toTable": "dim_linija",
+        "toColumn": "linijaKey"
+      },
+      {
+        "name": "5b181036-0bbf-4b49-88c2-4b9f3e2d10bf",
+        "fromTable": "fact_voznja",
+        "fromColumn": "radnikKey",
+        "toTable": "dim_radnik",
+        "toColumn": "radnikKey"
+      },
+      {
+        "name": "c07b1603-96d4-4e12-a55c-afc1e6fcbf62",
+        "fromTable": "fact_voznja",
+        "fromColumn": "voziloKey",
+        "toTable": "dim_vozilo",
+        "toColumn": "voziloKey"
+      }
+    ],
+    "annotations": [
+      {
+        "name": "ClientCompatibilityLevel",
+        "value": "400"
+      }
+    ]
+  },
+  "id": "SemanticModel"
+}
